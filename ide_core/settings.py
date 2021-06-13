@@ -13,6 +13,7 @@ DEBUG = Config.DEBUG
 ALLOWED_HOSTS = Config.ALLOWED_HOSTS
 
 INSTALLED_APPS = [
+    "api.apps.ApiConfig",
     "corsheaders",
     "rest_framework",
     "django.contrib.auth",
