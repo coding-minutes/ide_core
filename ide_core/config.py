@@ -12,3 +12,4 @@ class Config:
     DB_PASS = os.environ.get("DB_PASS")
 
     SOURCE_MAX_LIMIT = int(os.environ.get("SOURCE_MAX_LIMIT", 40 * 1024))
+    INPUT_MAX_LIMIT = int(os.environ.get("INPUT_MAX_LIMIT", 1 * 1024))

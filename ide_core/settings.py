@@ -13,6 +13,7 @@ DEBUG = Config.DEBUG
 ALLOWED_HOSTS = Config.ALLOWED_HOSTS
 
 INSTALLED_APPS = [
+    "api",
     "corsheaders",
     "rest_framework",
     "django.contrib.auth",
@@ -43,6 +44,16 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': Config.DB_NAME,
+#         'USER': Config.DB_USER,
+#         'PASSWORD': Config.DB_PASS,
+#         'HOST': Config.DB_HOST
+#     }
+# }
 
 
 LANGUAGE_CODE = "en-us"
