@@ -12,6 +12,9 @@ class CodeFileSerializer(BaseModelSerializer):
         fields = ["source", "user_email", "input", "lang", "id"]
         read_only_fields = ["id"]
 
+class PingPongView(APIView):
+    def get(self, request):
+        return Response({"message" : "pong"})
 
 class CodeFileDetailsView(RetrieveUpdateAPIView):
     queryset = CodeFile.objects.all()
