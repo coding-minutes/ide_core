@@ -1,8 +1,9 @@
 from dotenv import load_dotenv
 from pathlib import Path
-from ide_core.config import Config
 
 load_dotenv()
+
+from ide_core.config import Config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,21 +40,14 @@ REST_FRAMEWORK = {
 }
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': Config.DB_NAME,
+        'USER': Config.DB_USER,
+        'PASSWORD': Config.DB_PASS,
+        'HOST': Config.DB_HOST
     }
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': Config.DB_NAME,
-#         'USER': Config.DB_USER,
-#         'PASSWORD': Config.DB_PASS,
-#         'HOST': Config.DB_HOST
-#     }
-# }
 
 
 LANGUAGE_CODE = "en-us"
