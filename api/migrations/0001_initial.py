@@ -7,20 +7,27 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='CodeFile',
+            name="CodeFile",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('source', models.TextField(max_length=40960)),
-                ('user_email', models.CharField(max_length=256)),
-                ('lang', models.CharField(max_length=256)),
-                ('input', models.TextField(max_length=1024)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("source", models.TextField(max_length=40960)),
+                ("user_email", models.CharField(max_length=256)),
+                ("lang", models.CharField(max_length=256)),
+                ("input", models.TextField(max_length=1024)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
         ),
     ]
