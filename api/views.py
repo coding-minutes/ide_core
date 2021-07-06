@@ -4,7 +4,9 @@ from rest_framework.generics import RetrieveAPIView
 from api.models import CodeFile
 from api.serializers.base import BaseModelSerializer
 from rest_framework import serializers
-from utils.id_mapping import convertStringToInt, convertIntToString
+from utils.id_codec import get_id_codec
+
+IdCodec = get_id_codec()
 
 
 class CodeFileSerializer(BaseModelSerializer):
@@ -17,7 +19,7 @@ class CodeFileSerializer(BaseModelSerializer):
     def get_id(self, obj):
         # Base 10 to 26
         # Encoding
-        return convertIntToString(int(obj.pk))
+        return IdCodec.convertIntToString(int(obj.pk))
 
 
 class CodeFileDetailsView(RetrieveAPIView):
@@ -28,15 +30,18 @@ class CodeFileDetailsView(RetrieveAPIView):
         # Base 26 to 10
         # Decoding
         pk = kwargs.pop("pk")
-        kwargs["pk"] = convertStringToInt(pk)
+        kwargs["pk"] = IdCodec.convertStringToInt(pk)
         return super().dispatch(request, *args, **kwargs)
 
 
 class UpsertView(APIView):
     def post(self, request):
         body = request.data
-        id = body.get("id", None)
-        codefile, created = CodeFile.objects.update_or_create(id=id, defaults=body)
+        if body.get("id"):
+            body["id"] = IdCodec.convertStringToInt(body["id"])
+        codefile, created = CodeFile.objects.update_or_create(
+            id=body.get("id"), defaults=body
+        )
 
         serializer = CodeFileSerializer(codefile)
 
@@ -45,6 +50,4 @@ class UpsertView(APIView):
         else:
             status = 200
 
-        return Response(
-            {"data": serializer.data["data"], "created": created}, status=status
-        )
+        return Response(serializer.data, status=status)
