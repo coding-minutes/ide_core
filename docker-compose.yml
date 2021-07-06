@@ -2,12 +2,12 @@ version: "3"
 
 services:
     ide_core:
-        container_name: ide_core
+        image: codingminutes/ide_core
         env_file:
             - .env
         ports:
             - "8000:8000"
-        build: ./
+        build: .
         depends_on:
             - postgres
     postgres:
