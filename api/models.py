@@ -7,6 +7,8 @@ class CodeFile(models.Model):
     # TODO: Please change this to use s3
     source = models.TextField(max_length=Config.SOURCE_MAX_LIMIT)
     user_email = models.CharField(max_length=256)
+    lang = models.CharField(max_length=256)
+    input = models.TextField(max_length=Config.INPUT_MAX_LIMIT)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
