@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveAPIView, ListAPIView
 from api.models import CodeFile
 from api.serializers.base import BaseModelSerializer
 from rest_framework import serializers
@@ -51,3 +51,15 @@ class UpsertView(APIView):
             status = 200
 
         return Response(serializer.data, status=status)
+
+
+class SavedCodesView(ListAPIView):
+    serializer_class = CodeFileSerializer
+
+    def get_queryset(self):
+        return CodeFile.objects.filter(user_email=self.request.data["user_email"])
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = CodeFileSerializer(queryset, many=True)
+        return Response(serializer.data)
