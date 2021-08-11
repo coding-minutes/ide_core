@@ -15,7 +15,16 @@ class CodeFileSerializer(BaseModelSerializer):
 
     class Meta:
         model = CodeFile
-        fields = ["source", "user_email", "input", "lang", "id", "title", "created_at", "updated_at"]
+        fields = [
+            "source",
+            "user_email",
+            "input",
+            "lang",
+            "id",
+            "title",
+            "created_at",
+            "updated_at",
+        ]
 
     def get_id(self, obj):
         # Base 10 to 26
@@ -55,21 +64,27 @@ class UpsertView(APIView):
 
 
 class CodeFilePaginator(PageNumberPagination):
-    page_size=10
-    page_size_query_pams = 'page_size'
-    max_page_size=20
+    page_size = 10
+    page_size_query_pams = "page_size"
+    max_page_size = 20
 
     def get_paginated_response(self, data):
-        return Response({
-            'count' : self.page.paginator.count,
-            'next': self.get_next_link(),
-            'previous' : self.get_previous_link(),
-            **data
-        })
+        return Response(
+            {
+                "count": self.page.paginator.count,
+                "next": self.get_next_link(),
+                "previous": self.get_previous_link(),
+                **data,
+            }
+        )
+
 
 class SavedCodesView(ListAPIView):
     serializer_class = CodeFileSerializer
     pagination_class = CodeFilePaginator
 
     def get_queryset(self):
-        return CodeFile.objects.filter(user_email=self.request.data["user_email"])
+        return CodeFile.objects.filter(
+            user_email=self.request.data["user_email"],
+            title__icontains=self.request.data.get("query", ""),
+        ).order_by("-updated_at")
