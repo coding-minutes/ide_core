@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveAPIView, ListAPIView
+from rest_framework.pagination import PageNumberPagination
 from api.models import CodeFile
 from api.serializers.base import BaseModelSerializer
 from rest_framework import serializers
@@ -14,7 +15,16 @@ class CodeFileSerializer(BaseModelSerializer):
 
     class Meta:
         model = CodeFile
-        fields = ["source", "user_email", "input", "lang", "id"]
+        fields = [
+            "source",
+            "user_email",
+            "input",
+            "lang",
+            "id",
+            "title",
+            "created_at",
+            "updated_at",
+        ]
 
     def get_id(self, obj):
         # Base 10 to 26
@@ -51,3 +61,30 @@ class UpsertView(APIView):
             status = 200
 
         return Response(serializer.data, status=status)
+
+
+class CodeFilePaginator(PageNumberPagination):
+    page_size = 10
+    page_size_query_pams = "page_size"
+    max_page_size = 20
+
+    def get_paginated_response(self, data):
+        return Response(
+            {
+                "count": self.page.paginator.count,
+                "next": self.get_next_link(),
+                "previous": self.get_previous_link(),
+                **data,
+            }
+        )
+
+
+class SavedCodesView(ListAPIView):
+    serializer_class = CodeFileSerializer
+    pagination_class = CodeFilePaginator
+
+    def get_queryset(self):
+        return CodeFile.objects.filter(
+            user_email=self.request.query_params["user_email"],
+            title__icontains=self.request.query_params.get("query", ""),
+        ).order_by("-updated_at")

@@ -9,6 +9,7 @@ class CodeFile(models.Model):
     user_email = models.CharField(max_length=256)
     lang = models.CharField(max_length=256)
     input = models.TextField(max_length=Config.INPUT_MAX_LIMIT)
+    title = models.CharField(max_length=256)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
