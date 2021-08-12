@@ -85,6 +85,6 @@ class SavedCodesView(ListAPIView):
 
     def get_queryset(self):
         return CodeFile.objects.filter(
-            user_email=self.request.data["user_email"],
-            title__icontains=self.request.data.get("query", ""),
+            user_email=self.request.query_params["user_email"],
+            title__icontains=self.request.query_params.get("query", ""),
         ).order_by("-updated_at")
