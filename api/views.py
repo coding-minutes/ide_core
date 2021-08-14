@@ -68,12 +68,14 @@ class CodeFilePaginator(PageNumberPagination):
     page_size_query_pams = "page_size"
     max_page_size = 20
 
+
     def get_paginated_response(self, data):
         return Response(
             {
                 "count": self.page.paginator.count,
-                "next": self.get_next_link(),
-                "previous": self.get_previous_link(),
+                "next": self.page.next_page_number() if self.page.has_next() else None,
+                "previous": self.page.previous_page_number() if self.page.has_previous() else None,
+                "total_pages": self.page.paginator.num_pages,
                 **data,
             }
         )
